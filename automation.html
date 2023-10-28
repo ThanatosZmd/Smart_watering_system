@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <title>Smart gardening system</title>
+    </head>
+    <body>
+
+        <h1>
+            <img id= "school-logo"src="c:\Users\georg\Desktop\Smartgarden_robotics\images\npg_po_kts_logo.png">
+            Smart Watering System
+        </h1>
+        <h2>
+            <div class="link">
+                <a href="index.html">Main page/Manual config</a>
+            </div>
+        </h2>
+        <h3>    
+            <p>
+                
+                <div class="dhtData">
+                    <label for="tap1Date">Tap 1:</label>
+                    <input type="date" id="tap1Date">
+                    <input type="time" id="tap1Time">
+                    <button onclick="scheduleTap(1)">Schedule Tap 1</button>
+                    <br>
+                    
+                    <label for="tap2Date">Tap 2:</label>
+                    <input type="date" id="tap2Date">
+                    <input type="time" id="tap2Time">
+                    <button onclick="scheduleTap(2)">Schedule Tap 2</button>
+                    <br>
+                    
+                    <label for="tap3Date">Tap 3:</label>
+                    <input type="date" id="tap3Date">
+                    <input type="time" id="tap3Time">
+                    <button onclick="scheduleTap(3)">Schedule Tap 3</button>
+                    <br>
+                </div>
+                <div class="button-container">
+                    <button onclick="toggleTap(1)">Toggle Tap 1</button>
+                    <button onclick="toggleTap(2)">Toggle Tap 2</button>
+                    <button onclick="toggleTap(3)">Toggle Tap 3</button>
+                    <button onclick="toggleTap(4)">Toggle Tap 4</button>
+                    <button onclick="toggleTap(5)">Toggle Tap 5</button>
+                </div>
+            </p>
+        </h3>
+
+    </body>
+</html>
