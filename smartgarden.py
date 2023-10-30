@@ -97,7 +97,7 @@ def send_temp():
             temp = sensor.temperature
             hum = sensor.humidity
             payload = f'Temperature:{temp}*C  Humidity: {hum}%'
-            client.publish("sgarden/weather", payload)  # Make sure this line is indented correctly
+            client.publish("sgarden/weather", payload)  
             time.sleep(1)
 
         except RuntimeError as error:
