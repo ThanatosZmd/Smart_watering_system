@@ -115,20 +115,20 @@ button.deleteButton {
     </h2>
 
     <div class="dhtData">
-        <label for="tap1">Tap 1:</label>
-        <input type="date" id="tap1_date">
-        <input type="time" id="tap1_time">
+        <label for="tap1Date">Tap 1:</label>
+        <input type="date" id="tap1Date">
+        <input type="time" id="tap1Time">
         <button onclick="scheduleTap(1)">Schedule Tap 1</button>
         <br>
-        <label for="tap2">Tap 2:</label>
-        <input type="date" id="tap2_date">
-        <input type="time" id="tap2_time">
+        <label for="tap2Date">Tap 2:</label>
+        <input type="date" id="tap2Date">
+        <input type="time" id="tap2Time">
         <button onclick="scheduleTap(2)">Schedule Tap 2</button>
         <br>
 
-        <label for="tap3">Tap 3:</label>
-        <input type="date" id="tap3_date">
-        <input type="time" id="tap3_time">
+        <label for="tap3Date">Tap 3:</label>
+        <input type="date" id="tap3Date">
+        <input type="time" id="tap3Time">
         <button onclick="scheduleTap(3)">Schedule Tap 3</button>
         <br>
     </div>
@@ -144,29 +144,47 @@ button.deleteButton {
     <button id="removePreset">Remove Selected Preset</button>
     <script> 
  
- document.addEventListener('DOMContentLoaded', function () {
-    const presetSelect = document.getElementById('presetSelect');
-    const addPresetButton = document.getElementById('addPreset');
-    const editPresetButton = document.getElementById('editPreset');
-    const removePresetButton = document.getElementById('removePreset');
-    const submitScheduleButton = document.getElementById('submitSchedule');
+           
 
     var client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "client_" + new Date().getTime());
-
-    client.onConnectionLost = function (responseObject) {
-        console.log("Connection lost: " + responseObject.errorMessage);
-    };
-
-    client.connect({
-        onSuccess: function () {
-            console.log("Connected to MQTT broker");
-        },
-        onFailure: function (responseObject) {
-            console.log("Failed to connect: " + responseObject.errorMessage);
-        }
-    });
+    
+    client.connect({onSuccess:onConnect});            
 
 
+    function onConnect() {
+    console.log('Connected to MQTT broker');
+}
+
+    function scheduleTap(tapNumber) {
+        var dateInput = document.getElementById('tap' + tapNumber + 'Date');
+        var timeInput = document.getElementById('tap' + tapNumber + 'Time');
+    
+        var dateValue = dateInput.value;
+        var timeValue = timeInput.value;
+        
+        var message = {
+            tapNumber: tapNumber,
+            date: dateValue,
+            time: timeValue
+        };
+    
+        var messageString = JSON.stringify(message);
+    
+        var topic = 'schedule_tap';
+    
+        var message = new Paho.MQTT.Message(messageString);
+        message.destinationName = topic;
+        client.send(message);
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+            const presetSelect = document.getElementById('presetSelect');
+            const addPresetButton = document.getElementById('addPreset');
+            const editPresetButton = document.getElementById('editPreset');
+            const removePresetButton = document.getElementById('removePreset');
+            const submitScheduleButton = document.getElementById('submitSchedule');
     function updatePresetSelect() {
         presetSelect.innerHTML = '<option value="" disabled selected>Select a Preset</option>';
         presets.forEach((preset, index) => {
@@ -256,23 +274,33 @@ function getSelectedDays() {
     });
 
     submitScheduleButton.addEventListener('click', function() {
+        for (var i = 1; i <= 3; i++) {
+            setTimeout(function (tap) {
+                return function () {
+                    scheduleTap(tap);
+                }
+            }(i));
+        }
         alert('Schedules submitted!');
+        
     });
 
     presetSelect.addEventListener('change', function() {
         const selectedIndex = presetSelect.value;
         if (selectedIndex !== '') {
             const selectedPreset = presets[selectedIndex];
-            document.getElementById('tap1_date').value = selectedPreset.date;
-            document.getElementById('tap1_time').value = selectedPreset.time;
-            document.getElementById('tap2_date').value = selectedPreset.date;
-            document.getElementById('tap2_time').value = selectedPreset.time;
-            document.getElementById('tap3_date').value = selectedPreset.date;
-            document.getElementById('tap3_time').value = selectedPreset.time;
+            document.getElementById('tap1Date').value = selectedPreset.date;
+            document.getElementById('tap1Time').value = selectedPreset.time;
+            document.getElementById('tap2Date').value = selectedPreset.date;
+            document.getElementById('tap2Time').value = selectedPreset.time;
+            document.getElementById('tap3Date').value = selectedPreset.date;
+            document.getElementById('tap3Time').value = selectedPreset.time;
         }
     });
     removePresetButton.addEventListener('click', removeSelectedPreset);
 });
+
+
 
 
     </script>
