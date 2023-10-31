@@ -71,8 +71,7 @@ def on_message(client, userdata, message):
 				scheduled_tasks.append({'scheduled_time': scheduled_time, 'tapNumber': tapNumber})
 				print(f"Scheduled Time: {scheduled_time}")
 				print(f"Cuurent tapNumber is {tapNumber}")	
-				if current_time >= scheduled_time:
-					activate_tap(tapNumber)
+				
 
 				
 	except Exception as e:
@@ -97,7 +96,7 @@ def send_temp():
             temp = sensor.temperature
             hum = sensor.humidity
             payload = f'Temperature:{temp}*C  Humidity: {hum}%'
-            client.publish("sgarden/weather", payload)  
+            client.publish("sgarden/weather", payload)  # Make sure this line is indented correctly
             time.sleep(1)
 
         except RuntimeError as error:
@@ -121,8 +120,6 @@ def dev_check():
 def check_scheduled_tasks():
     while True:
         current_time = datetime.now().replace(second=0, microsecond=0)
-        client.publish("sgarden/check_time", current_time.strftime('%Y-%m-%d %H:%M:%S'))
-        
         for task in scheduled_tasks:
             scheduled_time = task['scheduled_time']
             tapNumber = task['tapNumber']
@@ -130,9 +127,8 @@ def check_scheduled_tasks():
             if current_time >= scheduled_time:
                 activate_tap(tapNumber)
                 scheduled_tasks.remove(task)
-                
         
-        time.sleep(2)  
+          
 def main():
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BCM)
@@ -158,3 +154,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
