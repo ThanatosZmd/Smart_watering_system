@@ -13,8 +13,10 @@ import random
 
 taps_board = [ 29, 31, 33, 36, 35, 38, 40, 37 ]
 taps = [5, 6, 13, 16, 19, 20, 21, 26]
+first_three_taps = [5,6,13]
 states = [ 0, 0, 0, 0, 0, 0, 0, 0 ]
 scheduled_tasks = []
+scheduled_days = []
 sensor = adafruit_dht.DHT11(board.D4)
 client = mqtt.Client()
 
@@ -62,6 +64,7 @@ def on_message(client, userdata, message):
 				
 		elif message.topic == 'checktaps':
 				client.publish("sgarden/taps", ','.join(map(str, states)))
+				
 		elif message.topic == 'schedule_tap':
 				payload = str(message.payload.decode("utf-8"))
 				data = json.loads(payload)
@@ -70,7 +73,21 @@ def on_message(client, userdata, message):
 				tapNumber = data['tapNumber']
 				scheduled_tasks.append({'scheduled_time': scheduled_time, 'tapNumber': tapNumber})
 				print(f"Scheduled Time: {scheduled_time}")
-				print(f"Cuurent tapNumber is {tapNumber}")	
+				print(f"Cuurent tapNumber is {tapNumber}")
+				
+		if message.topic == 'schedule_tap_days':
+				payload = str(message.payload.decode("utf-8"))
+				data = json.loads(payload)
+				schedule_days = data['days'][::]
+				schedule_time = datetime.strptime(data['time'], '%H:%M').time()
+				current_day = datetime.now().strftime('%a')
+				current_time = datetime.now().time()
+				scheduled_days.append({'schedule_days': schedule_days, 'schedule_time': schedule_time})
+				print(current_day)
+				print(schedule_time)
+				print(schedule_days)
+				
+	
 				
 
 				
@@ -88,6 +105,12 @@ def activate_tap(tapNumber):
 			GPIO.output(taps[num], GPIO.HIGH)
 	except Exception as e:
 		print(f'Error while turning on/off tap {tap_num}: {e}')
+
+def activate_first_three_taps():
+	for tap in first_three_taps:
+		GPIO.output(tap, GPIO.LOW)
+	
+	
 
 def send_temp():
     global client, sensor
@@ -117,6 +140,13 @@ def dev_check():
 		client.publish("sgarden/check", '[ok]')
 		time.sleep(1)
 
+def check_scheduled_days():
+	while True:
+		current_day = datetime.now().strftime('%a')
+		current_time = datetime.now().time()
+		if current_day in scheduled_days and current_time == schedule_time:
+			activate_first_three_taps()
+
 def check_scheduled_tasks():
     while True:
         current_time = datetime.now().replace(second=0, microsecond=0)
@@ -140,11 +170,14 @@ def main():
 	client.subscribe("settaps")
 	client.subscribe("checktaps")
 	client.subscribe("schedule_tap")
+	client.subscribe("schedule_tap_days")
 	client.on_message=on_message
 	t1 = threading.Thread(target=send_temp)
 	t2 = threading.Thread(target=dev_check)
-	task_check_thread = threading.Thread(target=check_scheduled_tasks)
-	task_check_thread.start()
+	t3 = threading.Thread(target=check_scheduled_tasks)
+	t4 = threading.Thread(target=check_scheduled_days)
+	t4.start()
+	t3.start()
 	t1.start()
 	t2.start()
 	print('Started...')
