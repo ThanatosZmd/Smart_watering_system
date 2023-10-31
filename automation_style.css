@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+ 
+h1 {
+    text-align: center;
+    margin-top: 10px;
+    color: #000;
+    font-size: 75px;
+    font-weight: bold;
+    font-family: "Aerial", cursive;
+}
+ 
+h2 {
+    text-align: center;
+    margin-top: 10px;
+    color: #000;
+    font-size: 55px;
+    font-weight: bold;
+    font-family: "Aerial", cursive;
+}
+ 
+h3 {
+    color: #000;
+    font-size: 45px;
+    font-weight: bold;
+    font-family: "Aerial", cursive; 
+}
+ 
+.schedule {
+    margin-bottom: 10px;
+}
+ 
+.schedule label {
+    display: inline-block;
+    width: 100px;
+}
+ 
+input[type="date"],
+input[type="time"] {
+    width: 150px;
+}
+ 
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+ 
+button#submitSchedule {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+ 
+button#submitSchedule:hover {
+    background-color: #45a049;
+}
+ 
+button#addPreset,
+button#editPreset {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+}
+ 
+button#addPreset:hover,
+button#editPreset:hover {
+    background-color: #007A8A;
+}
+ 
+select {
+    padding: 10px;
+    font-size: 16px;
+}
+button#removePreset {
+    background-color: #ff3333;
+    color: white;
+    border: none;
+    font-size: 14px;
+    padding: 8px 16px;
+}
+ 
+ 
+button.deleteButton {
+    background-color: #ff3333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+#school-logo{
+    max-height: 100%; 
+    width: 75px;
+    height: auto;
+}
+button#scheduleTap{
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+}
+body{
+    background-image: url(C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\garden.jpg);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}

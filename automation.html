@@ -1,51 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <meta charset="UTF-8">
+        <base href="https://www.tutorialspoint.com" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Smart gardening system</title>
-    </head>
-    <body>
-
-        <h1>
-            <img id= "school-logo"src="c:\Users\georg\Desktop\Smartgarden_robotics\images\npg_po_kts_logo.png">
-            Smart Watering System
-        </h1>
-        <h2>
-            <div class="link">
-                <a href="index.html">Main page/Manual config</a>
-            </div>
-        </h2>
-        <h3>    
-            <p>
-                
-                <div class="dhtData">
-                    <label for="tap1Date">Tap 1:</label>
-                    <input type="date" id="tap1Date">
-                    <input type="time" id="tap1Time">
-                    <button onclick="scheduleTap(1)">Schedule Tap 1</button>
-                    <br>
-                    
-                    <label for="tap2Date">Tap 2:</label>
-                    <input type="date" id="tap2Date">
-                    <input type="time" id="tap2Time">
-                    <button onclick="scheduleTap(2)">Schedule Tap 2</button>
-                    <br>
-                    
-                    <label for="tap3Date">Tap 3:</label>
-                    <input type="date" id="tap3Date">
-                    <input type="time" id="tap3Time">
-                    <button onclick="scheduleTap(3)">Schedule Tap 3</button>
-                    <br>
-                </div>
-                <div class="button-container">
-                    <button onclick="toggleTap(1)">Toggle Tap 1</button>
-                    <button onclick="toggleTap(2)">Toggle Tap 2</button>
-                    <button onclick="toggleTap(3)">Toggle Tap 3</button>
-                    <button onclick="toggleTap(4)">Toggle Tap 4</button>
-                    <button onclick="toggleTap(5)">Toggle Tap 5</button>
-                </div>
-            </p>
-        </h3>
-
-    </body>
+        <script src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\functions.js"></script>
+        <link rel="stylesheet" type="text/css" href="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\automation_style.css">
+</head>
+<body>
+    <h1>
+        <img id= "school-logo"src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\npg_po_kts_logo.png">
+        Smart Watering System
+    </h1>
+    <h2>
+        <div class="link">
+            <a href="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\index.html">Main page/Manual config</a>
+        </div>
+    </h2>
+    
+    <div class="dhtData">
+        <label for="tap1Date">Tap 1:</label>
+        <input type="date" class="tapDate" id="tap1Date">
+        <input type="time" class="tapTime" id="tap1Time">
+        <button id="scheduleTap"class="scheduleButton" onclick="scheduleTap(1)">Schedule Tap 1</button>
+        <br>
+        
+        <label for="tap2Date">Tap 2:</label>
+        <input type="date" class="tapDate" id="tap2Date">
+        <input type="time" class="tapTime" id="tap2Time">
+        <button id="scheduleTap"class="scheduleButton" onclick="scheduleTap(2)">Schedule Tap 2</button>
+        <br>
+        
+        <label for="tap3Date">Tap 3:</label>
+        <input type="date" class="tapDate" id="tap3Date">
+        <input type="time" class="tapTime" id="tap3Time">
+        <button id="scheduleTap"class="scheduleButton" onclick="scheduleTap(3)">Schedule Tap 3</button>
+        <br>
+        
+    </div>
+    
+    <div id="selectedPresetInfo"></div>
+    
+    
+    <button id="submitSchedule">Submit</button>
+    
+    <h3>Presets</h3>
+    <button id="addPreset">Add Custom Preset</button>
+    <select name="pressetSelect" id="presetSelect">
+        <option value="" selected>Select a Preset</option>
+        <option value="none">None</option>>
+    </select>
+    <button id="editPreset">Edit Selected Preset</button>
+    <button id="removePreset">Remove Selected Preset</button>
+</body>
 </html>

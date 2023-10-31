@@ -1,57 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="stylesheet.css">
-        <title>Smart Watering System</title>
-    </head>
-    <script src="functions.js"></script>
-    <body>
-        <h1>
-            <img id= "school-logo"src="C:\Users\georg\Desktop\Smartgarden_robotics\images\npg_po_kts_logo.png">
-            Smart Watering System
-        </h1>
-        <h2>
-            <div class="link">
-                <a href="automation.html">
-                    Automation
-                </a>
+<head>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <base href="https://www.tutorialspoint.com" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <title>Smart Watering System</title>
+    <script src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\main_page.js"></script>
+</head>
+<body>
+    <div id="dhtData"></div>
+    <h1>
+        <img id="school-logo" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\npg_po_kts_logo.png">
+ 
+        Smart Watering System
+    </h1>
+    <h2>
+        <div class="link">
+            <a href="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\automation.html">
+                Automation
+            </a>
+        </div>
+    </h2>
+    <h3>
+        <p>
+            <div class="temp_humidity">
+                Temperature: <span id="temperatureValue">0</span>
+                Humidity: <span id="humidityValue">0</span>
             </div>
-        </h2>
-        <h3>
-            <p>
-                <div class="temp_humidity">
-                    Temperature: <span id="temp">0</span>°C
-                    Humidity: <span id="humidity">0</span>%
-                </div>
-            </p>
-            <p>
-                <div class="image-container">
-                    <img src="C:\Users\georg\Desktop\Smartgarden_robotics\images\magnetventil-removebg-preview1.png" alt="Image 1">
-                    <img src="C:\Users\georg\Desktop\Smartgarden_robotics\images\magnetventil-removebg-preview1.png" alt="Image 2">
-                    <img src="C:\Users\georg\Desktop\Smartgarden_robotics\images\magnetventil-removebg-preview1.png" alt="Image 3">
-                </div>
-            </p>
-            <p>
-                <div class="button-container">
-                    <button id="myButton" onclick="tst1()">Start tap</button>
-                    <button id="myButton" onclick="tst1()">Start tap</button>
-                    <button id="myButton" onclick="tst1()">Start tap</button>
-                    
-                </div>
-            </p>
-            <p>
-                <div class="image-container">
-                    <img id="fan_png" src="images\fan_cut.png" alt="Image 1"></img>
-                    <img id="led_png" src="images\led.png" alt="Image 2"></img>
-                </div>
-                <div class = "button-container">
-                    <button id="led">Enable</button>
-                    <button id="fan">Enable</button>
-                </div>
-            </p>
-        </h3>
-        
-
-   </body>
+        </p>
+        <p>
+            <div class="image-container">
+                <img src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\magnetventil-removebg-preview1.png" alt="Image 1">
+                <img src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\magnetventil-removebg-preview1.png" alt="Image 2">
+                <img src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\magnetventil-removebg-preview1.png" alt="Image 3">
+            </div>
+        </p>
+        <p>
+            <div class="button-container">
+                <button onclick="toggleTap(1)">Toggle Tap 1</button>
+                <button onclick="toggleTap(2)">Toggle Tap 2</button>
+                <button onclick="toggleTap(3)">Toggle Tap 3</button>
+            </div>
+        </p>
+        <p>
+            <div class="image-container">
+                <img id="fan_png" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\fan_cut.png" alt="Image 1"></img>
+                <img id="led_png" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\led.png" alt="Image 2"></img>
+            </div>
+            <div class = "button-container">
+                <button id="led" onclick="toggleTap(4)">Enable</button>
+                <button id="fan" onclick="toggleTap(5)">Enable</button>
+            </div>
+        </p>
+    </h3> 
+</body>
  
 </html>
