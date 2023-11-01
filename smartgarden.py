@@ -13,10 +13,11 @@ import random
 
 taps_board = [ 29, 31, 33, 36, 35, 38, 40, 37 ]
 taps = [5, 6, 13, 16, 19, 20, 21, 26]
-first_three_taps = [5,6,13]
+first_three_taps = [5, 6, 13]
 states = [ 0, 0, 0, 0, 0, 0, 0, 0 ]
+scheduled_day_tasks = []
 scheduled_tasks = []
-scheduled_days = []
+web_data = []
 sensor = adafruit_dht.DHT11(board.D4)
 client = mqtt.Client()
 
@@ -34,19 +35,49 @@ print(now)
 	#	time.sleep(1)
 
     
-def turn_on_tap(tap_num):
+def activate_relays():
     try:
-        num = tap_num - 1
-        if states[num] == 0:
-            states[num] = 1
-            GPIO.output(taps[num], GPIO.LOW)
-        else:
-            states[num] = 0
-            GPIO.output(taps[num], GPIO.HIGH)
+        for tap_num in first_three_taps:
+            num = tap_num - 1
+            if states[num] == 0:
+                states[num] = 1
+                GPIO.output(taps[num], GPIO.LOW)
+            else:
+                states[num] = 0
+                GPIO.output(taps[num], GPIO.HIGH)
     except Exception as e:
-        print(f'Error while turning on/off tap {tap_num}: {e}')
+        print(f'Error while turning on/off taps: {e}')
 
+
+ 
+def convert_days_to_numbers(days):
+	day_mapping = {
+        'Mon': 1,
+        'Tue': 2,
+        'Wed': 3,
+        'Thu': 4,
+        'Fri': 5,
+        'Sat': 6,
+        'Sun': 7
+    }
+	
+	converted_days = []
+	for day in days.split(','):
+		converted_days.append(day_mapping[day.strip()])
+
+	return converted_days
 		
+
+
+def handle_scheduled_data(data):
+	schedule_days = convert_days_to_numbers(data['days'])
+	schedule_time = data['time']
+	
+	scheduled_day_tasks.append({'schedule_days': schedule_days, 'schedule_time': schedule_time})
+	
+	print(f"Scheduled Days: {schedule_days}")
+	print(f"Scheduled Time: {schedule_time}") 
+ 
 
 def on_message(client, userdata, message):
 	try:
@@ -75,24 +106,19 @@ def on_message(client, userdata, message):
 				print(f"Scheduled Time: {scheduled_time}")
 				print(f"Cuurent tapNumber is {tapNumber}")
 				
-		if message.topic == 'schedule_tap_days':
+		elif message.topic == 'schedule_tap_days':
 				payload = str(message.payload.decode("utf-8"))
 				data = json.loads(payload)
-				schedule_days = data['days'][::]
+				schedule_days = data['days']
 				schedule_time = datetime.strptime(data['time'], '%H:%M').time()
-				current_day = datetime.now().strftime('%a')
-				current_time = datetime.now().time()
-				scheduled_days.append({'schedule_days': schedule_days, 'schedule_time': schedule_time})
-				print(current_day)
-				print(schedule_time)
-				print(schedule_days)
-				
-	
-				
-
+				day_of_week = now.weekday()
+				time_now = datetime.now().time()
+				web_data.append({'schedule_days': schedule_days, 'schedule_time': schedule_time})
+				handle_scheduled_data(data)
 				
 	except Exception as e:
-			print(f'Invalid command: {e}')
+			print(f'Invalid command: {e}') 
+
 
 def activate_tap(tapNumber):
 	try:
@@ -105,13 +131,7 @@ def activate_tap(tapNumber):
 			GPIO.output(taps[num], GPIO.HIGH)
 	except Exception as e:
 		print(f'Error while turning on/off tap {tap_num}: {e}')
-
-def activate_first_three_taps():
-	for tap in first_three_taps:
-		GPIO.output(tap, GPIO.LOW)
-	
-	
-
+		
 def send_temp():
     global client, sensor
     while True:
@@ -119,7 +139,7 @@ def send_temp():
             temp = sensor.temperature
             hum = sensor.humidity
             payload = f'Temperature:{temp}*C  Humidity: {hum}%'
-            client.publish("sgarden/weather", payload)  # Make sure this line is indented correctly
+            client.publish("sgarden/weather", payload)  
             time.sleep(1)
 
         except RuntimeError as error:
@@ -142,11 +162,19 @@ def dev_check():
 
 def check_scheduled_days():
 	while True:
-		current_day = datetime.now().strftime('%a')
-		current_time = datetime.now().time()
-		if current_day in scheduled_days and current_time == schedule_time:
-			activate_first_three_taps()
-
+		current_time = datetime.now().replace(second=0,microsecond=0)
+		current_day = now.weekday()
+	
+		for data in web_data:
+			schedule_days = data['schedule_days']
+			schedule_time = data['schedule_time']
+		
+			for i, scheduled_day in enumerate(schedule_days):
+				if str(current_day) in schedule_days and current_time == schedule_time:
+					activate_relays()
+		
+		time.sleep(60)
+		
 def check_scheduled_tasks():
     while True:
         current_time = datetime.now().replace(second=0, microsecond=0)
@@ -157,7 +185,7 @@ def check_scheduled_tasks():
             if current_time >= scheduled_time:
                 activate_tap(tapNumber)
                 scheduled_tasks.remove(task)
-        
+     
           
 def main():
 	GPIO.setwarnings(False)
@@ -174,12 +202,12 @@ def main():
 	client.on_message=on_message
 	t1 = threading.Thread(target=send_temp)
 	t2 = threading.Thread(target=dev_check)
-	t3 = threading.Thread(target=check_scheduled_tasks)
-	t4 = threading.Thread(target=check_scheduled_days)
-	t4.start()
-	t3.start()
+	t4 = threading.Thread(target=check_scheduled_tasks)
+	t3 = threading.Thread(target=check_scheduled_days)
 	t1.start()
 	t2.start()
+	t3.start()
+	t4.start()
 	print('Started...')
 	client.loop_forever()
 
