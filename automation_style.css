@@ -1,12 +1,12 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    background-image: linear-gradient(to right, rgb(131, 19, 43), rgb(29, 48, 65));
+    
 }
  
-h1 {
+h1{
     text-align: center;
     margin-top: 10px;
-    color: #000;
     font-size: 75px;
     font-weight: bold;
     font-family: "Aerial", cursive;
@@ -15,14 +15,12 @@ h1 {
 h2 {
     text-align: center;
     margin-top: 10px;
-    color: #000;
     font-size: 55px;
     font-weight: bold;
     font-family: "Aerial", cursive;
 }
  
 h3 {
-    color: #000;
     font-size: 45px;
     font-weight: bold;
     font-family: "Aerial", cursive; 
@@ -46,6 +44,10 @@ button {
     margin-top: 10px;
     padding: 10px 20px;
     font-size: 16px;
+    border-radius: 10px;
+    font-family: Arial, cursive;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
  
 button#submitSchedule {
@@ -81,7 +83,11 @@ button#removePreset {
     font-size: 14px;
     padding: 8px 16px;
 }
- 
+.dhtData{
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: Arial, cursive;
+}
  
 button.deleteButton {
     background-color: #ff3333;
@@ -102,8 +108,10 @@ button#scheduleTap{
     border: none;
 }
 body{
-    background-image: url(C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\garden.jpg);
-    margin-left: auto;
+    /*background-image: url(C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\garden.jpg);
+    */margin-left: auto;
     margin-right: auto;
     text-align: center;
+    color:white
 }
+

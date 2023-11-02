@@ -1,9 +1,3 @@
-.container {
-    display: flex; /* Make the container a flex container */
-    align-items: center; /* Center the content vertically */
-    height: 200px; /* Set the desired height */
-}
-
 #school-logo{
     max-height: 100%; 
     width: 75px;
@@ -13,9 +7,14 @@
 h1{
     text-align: center;
     margin-top: 10px;
-    font-size: 55px;
+    font-size: 75px;
     font-weight: bold;
     font-family: "Aerial", cursive;
+}
+
+h3{
+    margin-top: 25px;
+    margin-bottom: auto;
 }
 
 .link {
@@ -28,7 +27,9 @@ h1{
 
 .image-container {
     display: flex;
-    justify-content: space-between;
+    width: auto;
+    height: auto;
+    justify-content: center;
     margin-top: 100px;
     
   }
@@ -44,26 +45,27 @@ h1{
 .button-container {
     display: flex;
     justify-content: space-between;
-    margin-top: 100px;
-    text-align: center;
+    margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
 }
 .button-container button {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 70%;
+    width: 100px;
+    height: 80px;
+    text-align: center;
     color: white;
     background-color: rgb(27, 27, 89);
     border: none;
     margin-top: 10px;
     padding: 10px 20px;
     font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
 }
   
 #fan_png {
     width: 300;
-    height: auto;
+    height: 300;
 }
 
 .temp_humidity {
@@ -85,19 +87,13 @@ h1{
     text-align: center;
 }
 
-button#fan{
-    color: white;
-    background-color: rgb(27, 27, 89);
-    border: none;
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;    
+button{
+    border-radius: 10px;
+    font-family: Arial, cursive;
+    box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.2);
+    cursor: pointer;
 }
-button#led{
-    color: white;
-    background-color: rgb(27, 27, 89);
-    border: none;
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
+body{
+    background-image: linear-gradient(to right, rgb(131, 19, 43), rgb(29, 48, 65));
+    color:white
 }
