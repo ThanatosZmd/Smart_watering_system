@@ -66,6 +66,7 @@ def handle_scheduled_data(data):
 	schedule_time_end = data['time_end']
 	
 	scheduled_day_tasks.append({'schedule_days': schedule_days, 'schedule_time_start': schedule_time_start, 'schedule_time_end': schedule_time_end})
+	client.publish("active_presets", json.dumps(scheduled_day_tasks))
 	edited_schedule_days = str(schedule_days)[1:-1]
 	print(scheduled_day_tasks)
 	print(f"Scheduled Days: {schedule_days}") 
@@ -109,7 +110,6 @@ def on_message(client, userdata, message):
 				time_now = datetime.now().time()
 				web_data.append({'schedule_days': schedule_days, 'schedule_time_start': schedule_time_start, 'schedule_time_end': schedule_time_end})
 				handle_scheduled_data(data)
-				
 	except Exception as e:
 			print(f'Invalid command: {e}') 
 
