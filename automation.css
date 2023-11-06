@@ -1,29 +1,22 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     background-image: linear-gradient(to right, rgb(131, 19, 43), rgb(29, 48, 65));
     
 }
  
 h1{
     text-align: center;
+    color: #ffffff;
     margin-top: 10px;
     font-size: 75px;
     font-weight: bold;
-    font-family: "Aerial", cursive;
+    font-family: 'Times New Roman', Times, serif;
 }
  
 h2 {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 55px;
-    font-weight: bold;
-    font-family: "Aerial", cursive;
-}
- 
-h3 {
     font-size: 45px;
     font-weight: bold;
-    font-family: "Aerial", cursive; 
+    font-family: 'Times New Roman', Times, serif;
 }
  
 .schedule {
@@ -45,7 +38,7 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 10px;
-    font-family: Arial, cursive;
+    font-family: 'Times New Roman', Times, serif;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
@@ -75,6 +68,8 @@ button#editPreset:hover {
 select {
     padding: 10px;
     font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
 }
 button#removePreset {
     background-color: #ff3333;
@@ -86,7 +81,7 @@ button#removePreset {
 .dhtData{
     margin-top: 20px;
     font-weight: bold;
-    font-family: Arial, cursive;
+    font-family: Arial, Helvetica, sans-serif;
 }
  
 button.deleteButton {
@@ -97,21 +92,50 @@ button.deleteButton {
     font-size: 16px;
     margin-left: 10px;
 }
-#school-logo{
-    max-height: 100%; 
-    width: 75px;
-    height: auto;
-}
 button#scheduleTap{
     color: white;
     background-color: #4CAF50;
     border: none;
 }
 body{
-    /*background-image: url(C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\garden.jpg);
-    */margin-left: auto;
+    margin-left: auto;
     margin-right: auto;
     text-align: center;
     color:white
 }
 
+.nav-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #333;
+    width: 200px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+}
+
+.nav-link.active {
+    background-color: #555;
+}
+
+.school-logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px; 
+}
+
+#content-container {
+    margin-left: 220px;
+}

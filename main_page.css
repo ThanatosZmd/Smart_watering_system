@@ -6,23 +6,17 @@
 
 h1{
     text-align: center;
+    color: #ffffff;
     margin-top: 10px;
     font-size: 75px;
     font-weight: bold;
-    font-family: "Aerial", cursive;
+    font-family: 'Times New Roman', Times, serif;
 }
+ 
 
-h3{
+h2{
     margin-top: 25px;
     margin-bottom: auto;
-}
-
-.link {
-    text-align: center;
-    margin-top: 50px;
-    
-    font-size: 50px;
-    font-family: "Aerial", cursive;
 }
 
 .image-container {
@@ -88,12 +82,50 @@ h3{
 }
 
 button{
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
     border-radius: 10px;
-    font-family: Arial, cursive;
-    box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.2);
+    font-family: 'Times New Roman', Times, serif;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 body{
     background-image: linear-gradient(to right, rgb(131, 19, 43), rgb(29, 48, 65));
     color:white
+}
+.nav-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #333;
+    width: 200px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+}
+
+.nav-link.active {
+    background-color: #555;
+}
+
+.school-logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px; 
+}
+
+#content-container {
+    margin-left: 220px;
 }

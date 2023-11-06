@@ -117,11 +117,45 @@ body{
     color:white
 }
 
+.nav-container {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        background-color: #333;
+        width: 200px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+    }
 
+    .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+        border-radius: 5px;
+    }
+
+    .nav-link.active {
+        background-color: #555;
+    }
+#school-logo img{
+    max-height: 50%; 
+    width: 75px;
+    height: auto;
+}
 </style>
 <body>
+    <div class="nav-container">
+        <img class="school-logo" src="./images/npg_po_kts_logo.png">
+        <a class="nav-link" href="./index.html" onclick="showPage('main-page')">Main Page</a>
+        <a class="nav-link active" href="#" onclick="showPage('automation-page')">Automation</a>
+        <a class="nav-link" href="./active_presets.html" onclick="showPage('presets-page')">Presets</a>
+    </div>
     <h1>
-        <img id= "school-logo"src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\npg_po_kts_logo.png">
         Smart Watering System
     </h1>
     
@@ -149,7 +183,6 @@ body{
     <div id="selectedPresetInfo"></div>
     
     
-    <button id="submitSchedule">Submit</button>
     
     <h2>Presets</h2>
     <button id="addPreset">Add Custom Preset</button>
@@ -159,6 +192,9 @@ body{
     </select>
     <button id="editPreset">Edit Selected Preset</button>
     <button id="removePreset">Remove Selected Preset</button>
+    <p>   
+        <button id="submitSchedule">Submit</button>
+    </p>
 </body>
 <script>
     var client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "client_" + new Date().getTime());
@@ -351,5 +387,31 @@ function getSelectedDays() {
  removePresetButton.addEventListener('click', removeSelectedPreset);
 });
 
+function showPage(pageId) {
+            var pages = ["main-page", "automation-page", "presets-page"];
+            for (var i = 0; i < pages.length; i++) {
+                var page = document.getElementById(pages[i]);
+                if (pages[i] === pageId) {
+                    page.style.display = "block";
+                    document.querySelector('.nav-link.active').classList.remove('active');
+                    document.querySelector('.nav-link[href="#"][onclick="showPage(\'' + pageId + '\')"]').classList.add('active');
+                } else {
+                    page.style.display = "none";
+                }
+            }
+        }
+        function loadContent(href) {
+            var contentContainer = document.getElementById('content-container');
+            contentContainer.innerHTML = '';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', href, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    contentContainer.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
 </script>
 </html>
