@@ -15,9 +15,8 @@ taps_board = [ 29, 31, 33, 36, 35, 38, 40, 37 ]
 taps = [5, 6, 13, 16, 19, 20, 21, 26]
 first_three_taps = [5, 6, 13]
 states = [ 0, 0, 0, 0, 0, 0, 0, 0 ]
-scheduled_day_tasks = []
 scheduled_tasks = []
-web_data = []
+schedules = []
 sensor = adafruit_dht.DHT11(board.D4)
 client = mqtt.Client()
 
@@ -34,43 +33,6 @@ print(now)
 	#while not is_internet_connected():
 	#	time.sleep(1)
 
-    
-def activate_relays(taps):
-    GPIO.output(taps[0], GPIO.LOW)
-    GPIO.output(taps[1],GPIO.LOW)
-
-
- 
-def convert_days_to_numbers(days):
-	day_mapping = {
-        'Mon': 1,
-        'Tue': 2,
-        'Wed': 3,
-        'Thu': 4,
-        'Fri': 5,
-        'Sat': 6,
-        'Sun': 7
-    }
-	
-	converted_days = []
-	for day in days.split(','):
-		converted_days.append(day_mapping[day.strip()])
-
-	return converted_days
-		
-
-
-def handle_scheduled_data(data):
-	schedule_days = convert_days_to_numbers(data['days'])
-	schedule_time_start = data['time_start']
-	schedule_time_end = data['time_end']
-	
-	scheduled_day_tasks.append({'schedule_days': schedule_days, 'schedule_time_start': schedule_time_start, 'schedule_time_end': schedule_time_end})
-	client.publish("active_presets", json.dumps(scheduled_day_tasks))
-	edited_schedule_days = str(schedule_days)[1:-1]
-	print(scheduled_day_tasks)
-	print(f"Scheduled Days: {schedule_days}") 
-	print(edited_schedule_days)
  
 
 def on_message(client, userdata, message):
@@ -100,16 +62,18 @@ def on_message(client, userdata, message):
 				print(f"Scheduled Time: {scheduled_time}")
 				print(f"Cuurent tapNumber is {tapNumber}")
 				
-		elif message.topic == 'schedule_tap_days':
+		elif message.topic == 'schedules':
 				payload = str(message.payload.decode("utf-8"))
-				data = json.loads(payload)
-				schedule_days = data['days']
-				schedule_time_start = datetime.strptime(data['time_start'], '%H:%M').time()
-				schedule_time_end = datetime.strptime(data['time_end'], '%H:%M').time()
-				day_of_week = now.weekday()
-				time_now = datetime.now().time()
-				web_data.append({'schedule_days': schedule_days, 'schedule_time_start': schedule_time_start, 'schedule_time_end': schedule_time_end})
-				handle_scheduled_data(data)
+				message_data = json.loads(payload)
+				schedules.append(message_data)
+				current_day = datetime.now().strftime('%A')
+				current_time = datetime.now()
+				print(current_time)
+				print(current_day)
+				print(schedules)
+				
+				
+				
 	except Exception as e:
 			print(f'Invalid command: {e}') 
 
@@ -166,22 +130,31 @@ def dev_check():
 
 def check_scheduled_days():
 	while True:
-		current_time = datetime.now()
-		current_day = now.weekday()
-	
-		for data in scheduled_day_tasks:
-			schedule_days = data['schedule_days']
-			edited_schedule_days = str(schedule_days)[1:-1]
-			schedule_time_start = data['schedule_time_start']
-			schedule_time_end = data['schedule_time_end']
-
-			if current_time == schedule_time_start:
-				activate_relays()
-			
-			elif current_time == schedule_time_end:
-				stop_relays()
 		
-		time.sleep(2)
+		for index, message_data in enumerate(schedules):
+			days = message_data['days'].split(',')
+			start_time = datetime.strptime(message_data['time_start'], '%H:%M').time()
+			end_time = datetime.strptime(message_data['time_end'], '%H:%M').time()
+			current_day = datetime.now().strftime('%A')
+			for day in days:
+				cleaned_days = day.strip()
+				print(cleaned_days)
+				print(end_time)
+
+				if current_day in cleaned_days:
+					current_time = datetime.now().time().replace(second=0, microsecond=0)
+					print(current_time)
+
+					if start_time <= current_time < end_time:
+						GPIO.output(6, GPIO.LOW)
+						GPIO.output(5, GPIO.LOW)
+						GPIO.output(13, GPIO.LOW)
+					if current_time >= end_time:
+						GPIO.output(5, GPIO.HIGH)
+						GPIO.output(6, GPIO.HIGH)
+						GPIO.output(13, GPIO.HIGH)
+
+			time.sleep(2)  # Sleep for one minute before checking again
 		
 def check_scheduled_tasks():
     while True:
@@ -206,7 +179,7 @@ def main():
 	client.subscribe("settaps")
 	client.subscribe("checktaps")
 	client.subscribe("schedule_tap")
-	client.subscribe("schedule_tap_days")
+	client.subscribe("schedules")
 	client.on_message=on_message
 	t1 = threading.Thread(target=send_temp)
 	t2 = threading.Thread(target=dev_check)
