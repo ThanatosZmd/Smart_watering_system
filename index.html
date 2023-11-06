@@ -2,58 +2,262 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
-    <base href="https://www.tutorialspoint.com" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
     <title>Smart Watering System</title>
-    <script src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\main_page.js"></script>
 </head>
-<body>
+<style>
+    #school-logo{
+    max-height: 100%; 
+    width: 75px;
+    height: auto;
+}
 
+h1{
+    text-align: center;
+    color: #ffffff;
+    margin-top: 10px;
+    font-size: 75px;
+    font-weight: bold;
+    font-family: "Aerial", cursive;
+}
+
+h2{
+    margin-top: 25px;
+    margin-bottom: auto;
+}
+
+.link {
+    text-align: center;
+    margin-top: 50px;
+    
+    font-size: 50px;
+    font-family: "Aerial", cursive;
+}
+
+.image-container {
+    display: flex;
+    width: auto;
+    height: auto;
+    justify-content: center;
+    margin-top: 100px;
+    
+  }
+.image-container img {
+    width: 150px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.button-container button {
+    width: 100px;
+    height: 80px;
+    text-align: center;
+    color: white;
+    background-color: rgb(27, 27, 89);
+    border: none;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+  
+#fan_png {
+    width: 300;
+    height: 300;
+}
+
+.temp_humidity {
+    margin-top: 75px;
+    font-size: 35px;
+    margin-left: auto;
+    margin-right: auto;  
+    margin-top: 25px;
+    text-align: center;
+}
+
+.dhtData {
+    display: flex;
+    justify-content: space-between;
+    font-size: 35px;
+    margin-top: auto;
+    margin-left: 75px;
+    margin-right: auto;
+    text-align: center;
+}
+
+button{
+    border-radius: 10px;
+    font-family: Arial, cursive;
+    box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+body{
+    background-image: linear-gradient(to right, rgb(131, 19, 43), rgb(29, 48, 65));
+    color:white
+}
+.nav-container {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        background-color: #333;
+        width: 200px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+    }
+
+    .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+        border-radius: 5px;
+    }
+
+    .nav-link.active {
+        background-color: #555;
+    }
+
+    .school-logo {
+        width: 100px;
+        height: auto;
+        margin-bottom: 20px; 
+    }
+
+    #content-container {
+        margin-left: 220px;
+    }
+</style>
+<body>
+    <div class="nav-container">
+        <img class="school-logo" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\npg_po_kts_logo.png">
+        <a class="nav-link active" href="#" onclick="showPage('main-page')">Main Page</a>
+        <a class="nav-link" href="./test_atomation.html" onclick="showPage('automation-page')">Automation</a>
+        <a class="nav-link" href="./active_presets.html" onclick="showPage('presets-page')">Presets</a>
+    </div>
+
+    <div id="dhtData"></div>
     <h1>
-    
-        <img id="school-logo" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\npg_po_kts_logo.png">
         Smart Watering System
-    
     </h1>
-    
     <h2>
-    
-        <div class="link">
-            <a href="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\automation.html">
-                Automation
-            </a>
-        </div>
-    
-    </h2>
-    <h3>
         <p>
-        
             <div class="temp_humidity">
                 Temperature: <span id="temperatureValue">0</span>
                 Humidity: <span id="humidityValue">0</span>
             </div>
-        
         </p>
         <p>
-            
             <div class="image-container">
                 <img src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\magnetventil-removebg-preview1.png" alt="Image 1">
                 <img src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\magnetventil-removebg-preview1.png" alt="Image 2">
                 <img src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\magnetventil-removebg-preview1.png" alt="Image 3">
+            </div>
+        </p>
+        <p>
+            <div class="button-container">
+                <button onclick="toggleTap(1)">Toggle Tap 1</button>
+                <button onclick="toggleTap(2)">Toggle Tap 2</button>
+                <button onclick="toggleTap(3)">Toggle Tap 3</button>
+            </div>
+        </p>
+        <p>
+            <div class="image-container">
                 <img id="fan_png" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\fan.png" alt="Image 1"></img>
                 <img id="led_png" src="C:\Users\georg\Desktop\Smartgarden_robotics\Smart_watering_system\images\led.png" alt="Image 2"></img>
             </div>
-            
+
             <div class="button-container">
-                <button id="tap"onclick="toggleTap(1)">Toggle Tap 1</button>
-                <button id="tap"onclick="toggleTap(2)">Toggle Tap 2</button>
-                <button id="tap"onclick="toggleTap(3)">Toggle Tap 3</button>
-                <button id="220V" onclick="toggle220V(4)">Enable</button>
-                <button id="220V" onclick="toggle220V(5)">Enable</button>
+                <button id="led" onclick="toggleTap(4)">Enable</button>
+                <button id="fan" onclick="toggleTap(5)">Enable</button>
             </div>
-        
         </p>
-    </h3> 
+    </h2>
+    <script>
+        var client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "client_" + new Date().getTime());
+
+client.onConnectionLost = function (responseObject) {
+        console.log("Connection lost: " + responseObject.errorMessage);
+    };
+        
+function toggleTap(tapNumber) {
+    var message = new Paho.MQTT.Message(tapNumber.toString());
+    message.destinationName = "settaps";
+    client.send(message);
+}
+
+    client.connect({
+        onSuccess: function () {
+            console.log("Connected to MQTT broker");
+            client.subscribe("sgarden/weather");
+        },
+        onFailure: function (responseObject) {
+            console.log("Failed to connect: " + responseObject.errorMessage);
+        }
+        });
+        client.onMessageArrived = function (message) {
+    if (message.destinationName === "sgarden/weather") {
+        var payloadString = message.payloadString;
+        var data = parseTempHumidityString(payloadString);
+
+        document.getElementById("temperatureValue").innerText = data.temperature + "°C";
+        document.getElementById("humidityValue").innerText = data.humidity + "%";
+    }
+}
+
+function parseTempHumidityString(payloadString) {
+    var parts = payloadString.split(' ');
+    var tempValue = parts[0].split(':')[1];
+    var humidityValue = parts[3];
+
+    return {
+        temperature: parseFloat(tempValue),
+        humidity: parseInt(humidityValue)
+    };
+}
+
+function showPage(pageId) {
+            var pages = ["main-page", "automation-page", "presets-page"];
+            for (var i = 0; i < pages.length; i++) {
+                var page = document.getElementById(pages[i]);
+                if (pages[i] === pageId) {
+                    page.style.display = "block";
+                    document.querySelector('.nav-link.active').classList.remove('active');
+                    document.querySelector('.nav-link[href="#"][onclick="showPage(\'' + pageId + '\')"]').classList.add('active');
+                } else {
+                    page.style.display = "none";
+                }
+            }
+        }
+        function loadContent(href) {
+            var contentContainer = document.getElementById('content-container');
+            contentContainer.innerHTML = '';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', href, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    contentContainer.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    </script>    
+    
 </body>
  
 </html>
