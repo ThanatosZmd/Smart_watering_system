@@ -68,11 +68,8 @@ def on_message(client, userdata, message):
 				schedules.append(message_data)
 				current_day = datetime.now().strftime('%A')
 				current_time = datetime.now()
-				print(current_time)
-				print(current_day)
-				print(schedules)
-				
-				
+				if schedules and len(schedules) > 1:
+					del schedules[0]
 				
 	except Exception as e:
 			print(f'Invalid command: {e}') 
@@ -120,7 +117,6 @@ def send_temp():
             time.sleep(2.0)
 
 
-
 def dev_check():
 	global client
 	while True:
@@ -138,8 +134,6 @@ def check_scheduled_days():
 			current_day = datetime.now().strftime('%A')
 			for day in days:
 				cleaned_days = day.strip()
-				print(cleaned_days)
-				print(end_time)
 
 				if current_day in cleaned_days:
 					current_time = datetime.now().time().replace(second=0, microsecond=0)
@@ -154,7 +148,7 @@ def check_scheduled_days():
 						GPIO.output(6, GPIO.HIGH)
 						GPIO.output(13, GPIO.HIGH)
 
-			time.sleep(2) 
+			time.sleep(5)  
 		
 def check_scheduled_tasks():
     while True:
@@ -183,8 +177,8 @@ def main():
 	client.on_message=on_message
 	t1 = threading.Thread(target=send_temp)
 	t2 = threading.Thread(target=dev_check)
-	t4 = threading.Thread(target=check_scheduled_tasks)
-	t3 = threading.Thread(target=check_scheduled_days)
+	t3 = threading.Thread(target=check_scheduled_tasks)
+	t4 = threading.Thread(target=check_scheduled_days)
 	t1.start()
 	t2.start()
 	t3.start()
