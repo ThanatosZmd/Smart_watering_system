@@ -154,7 +154,7 @@ def check_scheduled_days():
 						GPIO.output(6, GPIO.HIGH)
 						GPIO.output(13, GPIO.HIGH)
 
-			time.sleep(2)  # Sleep for one minute before checking again
+			time.sleep(2) 
 		
 def check_scheduled_tasks():
     while True:
